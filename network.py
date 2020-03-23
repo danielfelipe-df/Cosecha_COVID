@@ -2,8 +2,11 @@ import networkx as nx
 import numpy as np
 import matplotlib.pyplot as plt
 
+#Número de nodos
+N = 1000
+
 #Creo el grafo que va a estar en la mitad
-G = nx.watts_strogatz_graph(10,5,0.1,876)
+G = nx.watts_strogatz_graph(N,5,0.1,876)
 
 #Le doy una forma circular para poderlo ver mejor.
 #Es una red de mundo pequeño.
@@ -20,8 +23,8 @@ matrix = nx.to_numpy_matrix(G)
 print(matrix)
 
 #Genero el primer nodo externo
-row = [1]*len(matrix)
-column = [1]*len(matrix)
+row = [1]*N
+column = [1]*N
 column.append(0)
 
 #Lo agrego a la matriz
@@ -49,8 +52,8 @@ G = nx.from_numpy_matrix(matrix)
 print(pos)
 
 #Le agrego las posiciones de los nuevos nodos
-pos[10] = np.array([2.0,2.0])
-pos[11] = np.array([-2.0,-2.0])
+pos[N] = np.array([2.0,2.0])
+pos[N+1] = np.array([-2.0,-2.0])
 
 #Imprimo las posiciones de la nueva red
 print(pos)
