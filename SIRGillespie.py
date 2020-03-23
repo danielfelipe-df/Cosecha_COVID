@@ -29,8 +29,8 @@ tiempo=[]
 Ii=[]
 # Main loop
 lentime=[]
-def Gilles1(beta,gamma,S,I,R):
-	T = 20.0
+T = 20.0
+def Gilles1(beta,gamma,S,I,R,T):
 	# float; start time
 	t = 0.0
 	time=[]
@@ -71,7 +71,7 @@ nsim=1000
 times=[]
 Nss=[]
 for i in range(nsim):	
-	timee,Ns,Ni,Nr=Gilles1(beta,gamma,S,I,R)
+	timee,Ns,Ni,Nr=Gilles1(beta,gamma,S,I,R,T)
 	times.append(timee)
 	Nss.append(Ni)
 	if i%100==0:
