@@ -65,6 +65,8 @@ def Gilles1(beta,gamma,S,I,R):
 			NR.append(R)
 	lentime.append(len(time))
 	return time,NS,NI,NR
+
+""" #Si desea modelar la dinamica en un nodo para nsim simulaciones y compararla con el resultado analitico del modelo SIR, elimine este comentario.
 nsim=1000
 times=[]
 Nss=[]
@@ -93,3 +95,4 @@ plt.xlabel("Tiempo")
 plt.ylabel("I(t)")
 plt.title("SIR-DG")
 plt.show()
+"""
