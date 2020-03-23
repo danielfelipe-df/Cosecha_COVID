@@ -9,7 +9,6 @@ N = 1000
 G = nx.watts_strogatz_graph(N,5,0.1,876)
 
 #Le doy una forma circular para poderlo ver mejor.
-#Es una red de mundo pequeño.
 pos = nx.circular_layout(G)
 
 #Dibujo la red
