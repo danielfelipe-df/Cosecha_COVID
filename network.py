@@ -59,32 +59,39 @@ def swap(G, matrix, maxi):
 
     return G
 
+def print_data(N,NS,NE,NI,NR):
+    #Hago el ciclo en cada nodo
+    for i in range(N):
+        with open("node_" + str(i) + ".csv", "a") as myfile:
+            for j in range(len(NS)):
+                myfile.write(str(NS[j]) + '\t' + str(NE[j]) + '\t' + str(NI[j]) + '\t' + str(NR[j]) + '\n')
 
-#Número de nodos
+'''
+Número de nodos
 N = 15
 
-#Creo el grafo que va a estar en la mitad
+Creo el grafo que va a estar en la mitad
 G = nx.watts_strogatz_graph(N,5,0.1,876)
 
-#Genero la matriz de adjacencia como una matriz de numpy para editar.
+Genero la matriz de adjacencia como una matriz de numpy para editar.
 matrix = nx.to_numpy_matrix(G)
 print(matrix[0])
 
-#Genero la matriz pesada
+Genero la matriz pesada
 ran.seed(68798)
 for i in range(N*N):
     if(matrix.item(i) != 0):
         matrix.itemset(i,ran.randint(1,11))
 
-#Creo el nuevo grafo pesado
+Creo el nuevo grafo pesado
 G = nx.from_numpy_matrix(matrix)
 print(matrix)
 
-#Defino la población en los nodos
+Defino la población en los nodos
 S = 4990
 I = 10
 
-#Defino el diccionario que me va a dar la propiedad de Susceptibles, Expuesto, Infectado y Recuperado
+Defino el diccionario que me va a dar la propiedad de Susceptibles, Expuesto, Infectado y Recuperado
 sus = {}
 exp = {}
 inf = {}
@@ -94,14 +101,15 @@ for i in range(N):
     exp[i] = 0
     inf[i] = 0
     rec[i] = 0
-#Defino la semilla para el número aleatorio de susceptibles
+Defino la semilla para el número aleatorio de susceptibles
 ran.seed(7678)
-#Guardo cada Susceptible en algún nodo
+Guardo cada Susceptible en algún nodo
 for i in range(S):
     sus[ran.randint(0,N-1)] += 1
 print("Susceptibles: ", sus)
-#Hago lo mismo para los Infectados
+Hago lo mismo para los Infectados
 ran.seed(673828)
+
 for i in range(I):
     inf[ran.randint(0,N-1)] += 1
 print("Infectados: ", inf)
@@ -130,4 +138,4 @@ net_drawing(G,pos,sus,'Susceptibles')
 #net_drawing(G,pos,exp,'Expuestos')
 #net_drawing(G,pos,inf,'Infectados')
 #net_drawing(G,pos,rec,'Recuperados')
-
+'''

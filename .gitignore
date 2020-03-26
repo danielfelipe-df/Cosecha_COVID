@@ -3,3 +3,4 @@
 *.pdf
 *.csv
 prueba.py
+__pycache__/
