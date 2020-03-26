@@ -11,6 +11,55 @@ def net_drawing(G,pos,labels,title):
     plt.show()
     plt.clf()
 
+#Defino la función para hacer el intercambio de agentes
+def swap(G, matrix, maxi):
+    #Hallo la suma de los pesos alrededor de cada nodo
+    suma = []
+    for i in range(len(matrix)):
+        suma.append(np.sum(matrix[i])/maxi)
+
+    '''
+    Obtengo los diccionarios con los Susceptibles, Expuestos, Infectados y
+    Recuperados de cada nodo
+    '''
+    not_aux = [{}]*4
+    not_aux[0] = nx.get_node_attributes(G,'Susceptibles')
+    not_aux[1] = nx.get_node_attributes(G,'Expuestos')
+    not_aux[2] = nx.get_node_attributes(G,'Infectados')
+    not_aux[3] = nx.get_node_attributes(G,'Recuperados')
+
+    '''
+    Defino unos diccionarios donde pondré los nuevos Susceptibles, Expuestos,
+    Infectados y Recuperados de cada nodo
+    '''
+    aux = []
+    
+    #Le quito las personas que se van a pasar a los nodos
+    for i in range(4):
+        aaux = {}
+        #Defino la proporción de personas de cada tipo que se van y las resto
+        for j in range(len(matrix)):
+            aaux[j] = suma[j]*not_aux[i][j]
+            not_aux[i][j] -= aaux[j]
+        aux.append(aaux)
+
+    #Hago la asignación de esas personas a los nuevos nodos
+    for i in range(len(matrix)):
+        #Hago el ciclo sobre los tipos de agentes
+        for j in range(4):
+            #Hago el ciclo sobre los vecinos del nodo
+            for k in range(len(matrix)):
+                not_aux[j][k] += (matrix.item((i,k))/500)*aux[j][i]
+
+    #Le asigno los nuevos valores de las personas a los nodos
+    nx.set_node_attributes(G, not_aux[0], 'Susceptibles')
+    nx.set_node_attributes(G, not_aux[1], 'Expuestos')
+    nx.set_node_attributes(G, not_aux[2], 'Infectados')
+    nx.set_node_attributes(G, not_aux[3], 'Recuperados')
+
+    return G
+
+
 #Número de nodos
 N = 15
 
@@ -66,8 +115,19 @@ nx.set_node_attributes(G, rec, 'Recuperados')
 #Le doy una forma circular para poderlo ver mejor.
 pos = nx.circular_layout(G)
 
+net_drawing(G,pos,sus,'Susceptibles')
+
+#Hago el intercambio de personas
+G = swap(G, matrix, 500)
+sus = nx.get_node_attributes(G,'Susceptibles')
+exp = nx.get_node_attributes(G,'Expuestos')
+inf = nx.get_node_attributes(G,'Infectados')
+rec = nx.get_node_attributes(G,'Recuperados')
+
+
 #Dibujo la red
 net_drawing(G,pos,sus,'Susceptibles')
-net_drawing(G,pos,exp,'Expuestos')
-net_drawing(G,pos,inf,'Infectados')
-net_drawing(G,pos,rec,'Recuperados')
+#net_drawing(G,pos,exp,'Expuestos')
+#net_drawing(G,pos,inf,'Infectados')
+#net_drawing(G,pos,rec,'Recuperados')
+
