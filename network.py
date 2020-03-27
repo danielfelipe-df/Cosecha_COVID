@@ -16,55 +16,61 @@ def swap(G, matrix, maxi):
     #Hallo la suma de los pesos alrededor de cada nodo
     suma = []
     for i in range(len(matrix)):
-        suma.append(np.sum(matrix[i])/maxi)
+        suma.append(np.sum(matrix[i]))
 
     '''
     Obtengo los diccionarios con los Susceptibles, Expuestos, Infectados y
     Recuperados de cada nodo
     '''
-    not_aux = [{}]*4
-    not_aux[0] = nx.get_node_attributes(G,'Susceptibles')
-    not_aux[1] = nx.get_node_attributes(G,'Expuestos')
-    not_aux[2] = nx.get_node_attributes(G,'Infectados')
-    not_aux[3] = nx.get_node_attributes(G,'Recuperados')
+    sus = nx.get_node_attributes(G,'Susceptibles')
+    exp = nx.get_node_attributes(G,'Expuestos')
+    inf = nx.get_node_attributes(G,'Infectados')
+    rec = nx.get_node_attributes(G,'Recuperados')
 
     '''
     Defino unos diccionarios donde pondré los nuevos Susceptibles, Expuestos,
     Infectados y Recuperados de cada nodo
     '''
-    aux = []
+    asus = {}
+    aexp = {}
+    ainf = {}
+    arec = {}
     
-    #Le quito las personas que se van a pasar a los nodos
-    for i in range(4):
-        aaux = {}
-        #Defino la proporción de personas de cada tipo que se van y las resto
-        for j in range(len(matrix)):
-            aaux[j] = suma[j]*not_aux[i][j]
-            not_aux[i][j] -= aaux[j]
-        aux.append(aaux)
+    #Defino la proporción de personas de cada tipo que se van y las resto
+    value = 0
+    for i in range(len(matrix)):
+        value = suma[i]/maxi
+        asus[i] = value*sus[i]
+        sus[i] -= asus[i]
+        aexp[i] = value*exp[i]
+        exp[i] -= aexp[i]
+        ainf[i] = value*inf[i]
+        inf[i] -= ainf[i]
+        arec[i] = value*rec[i]
+        rec[i] -= arec[i]
 
     #Hago la asignación de esas personas a los nuevos nodos
     for i in range(len(matrix)):
-        #Hago el ciclo sobre los tipos de agentes
-        for j in range(4):
-            #Hago el ciclo sobre los vecinos del nodo
-            for k in range(len(matrix)):
-                not_aux[j][k] += (matrix.item((i,k))/500)*aux[j][i]
+        #Hago el ciclo sobre los vecinos del nodo
+        for j in range(len(matrix)):
+            value = matrix.item((i,j))/suma[i]
+            sus[j] += value*asus[i]
+            exp[j] += value*aexp[i]
+            inf[j] += value*ainf[i]
+            rec[j] += value*arec[i]
 
     #Le asigno los nuevos valores de las personas a los nodos
-    nx.set_node_attributes(G, not_aux[0], 'Susceptibles')
-    nx.set_node_attributes(G, not_aux[1], 'Expuestos')
-    nx.set_node_attributes(G, not_aux[2], 'Infectados')
-    nx.set_node_attributes(G, not_aux[3], 'Recuperados')
+    nx.set_node_attributes(G, sus, 'Susceptibles')
+    nx.set_node_attributes(G, exp, 'Expuestos')
+    nx.set_node_attributes(G, inf, 'Infectados')
+    nx.set_node_attributes(G, rec, 'Recuperados')
 
     return G
 
-def print_data(N,NS,NE,NI,NR):
-    #Hago el ciclo en cada nodo
-    for i in range(N):
-        with open("node_" + str(i) + ".csv", "a") as myfile:
-            for j in range(len(NS)):
-                myfile.write(str(NS[j]) + '\t' + str(NE[j]) + '\t' + str(NI[j]) + '\t' + str(NR[j]) + '\n')
+def print_data(i,NS,NE,NI,NR,k):
+    with open("Data_" + str(k) + "/node_" + str(i) + ".csv", "a") as myfile:
+        for j in range(len(NS)):
+            myfile.write(str(NS[j]) + '\t' + str(NE[j]) + '\t' + str(NI[j]) + '\t' + str(NR[j]) + '\n')
 
 '''
 Número de nodos

@@ -25,7 +25,7 @@ def modelo_seir(y,t, beta,gamma,sigma,pop):
                 return([dS_dt,dE_dt, dI_dt,dR_dt])
 
 def resolviendo(t_i,t_f,S0,E0,I0,R0,beta,gamma,sigma):
-	t=np.linspace(t_i,t_f,500)
+	t=np.linspace(t_i,t_f,100)
 	pop=S0+E0+I0+R0
 	solucion = scipy.integrate.odeint(modelo_seir, [S0,E0,I0,R0], t, args=(beta,gamma,sigma,pop))
 	return(solucion[:,0],solucion[:,1],solucion[:,2],solucion[:,3])
