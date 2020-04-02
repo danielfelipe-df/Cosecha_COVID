@@ -5,3 +5,6 @@
 prueba.py
 __pycache__/
 a.out
+*.cpp
+*.h
+*.xlsx
